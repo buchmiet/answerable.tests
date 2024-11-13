@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Answerable.Dialogs.Wpf.Test", "Answerable.Dialogs.Wpf.Test\Answerable.Dialogs.Wpf.Test.csproj", "{CFA0B6FD-2F72-45F5-90A9-723761EE7E3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Answerable.Dialogs.Wpf.Test", "Answerable.Dialogs.Wpf.Test\Answerable.Dialogs.Wpf.Test.csproj", "{CFA0B6FD-2F72-45F5-90A9-723761EE7E3A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Answers", "..\Answers\Answers\Answers.csproj", "{29461479-28EA-4C7E-B884-8082B56EEA02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnswerGenerator", "..\Answers\AnswerGenerator\AnswerGenerator.csproj", "{0F1921A7-69F0-4440-A427-DFD99ED23039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{CFA0B6FD-2F72-45F5-90A9-723761EE7E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFA0B6FD-2F72-45F5-90A9-723761EE7E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFA0B6FD-2F72-45F5-90A9-723761EE7E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29461479-28EA-4C7E-B884-8082B56EEA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29461479-28EA-4C7E-B884-8082B56EEA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29461479-28EA-4C7E-B884-8082B56EEA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29461479-28EA-4C7E-B884-8082B56EEA02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1921A7-69F0-4440-A427-DFD99ED23039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1921A7-69F0-4440-A427-DFD99ED23039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1921A7-69F0-4440-A427-DFD99ED23039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1921A7-69F0-4440-A427-DFD99ED23039}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
