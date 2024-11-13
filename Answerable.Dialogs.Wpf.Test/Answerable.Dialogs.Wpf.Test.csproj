@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-	  <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	  <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
@@ -15,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Answerable" Version="0.4.14" />
+    <PackageReference Include="Answerable" Version="0.4.22" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
   </ItemGroup>
 
 </Project>
