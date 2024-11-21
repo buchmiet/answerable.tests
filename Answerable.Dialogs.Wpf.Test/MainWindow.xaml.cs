@@ -10,15 +10,52 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Answers;
+using Answers.Dialogs;
 
 namespace Answerable.Dialogs.Wpf.Test;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-///
-///
-///
+//public partial class YesNoDialog : Window
+//{
+//    private readonly TaskCompletionSource<bool> _tcs = new TaskCompletionSource<bool>();
+//    public bool Result { get; private set; }
+
+//    public YesNoDialog(string message)
+//    {
+//        InitializeComponent();
+//        MessageTextBlock.Text = message;
+
+//        YesButton.Click += OnYesButtonClicked;
+//        NoButton.Click += OnNoButtonClicked;
+//        this.Closed += OnDialogClosed;
+//    }
+
+//    public Task<bool> WaitForButtonPressAsync()
+//    {
+//        return _tcs.Task;
+//    }
+
+//    private void OnYesButtonClicked(object sender, RoutedEventArgs e)
+//    {
+//        Result = true;
+//        _tcs.TrySetResult(true);
+//        this.Close();
+//    }
+
+//    private void OnNoButtonClicked(object sender, RoutedEventArgs e)
+//    {
+//        Result = false;
+//        _tcs.TrySetResult(false);
+//        this.Close();
+//    }
+
+//    private void OnDialogClosed(object sender, EventArgs e)
+//    {
+//        if (!_tcs.Task.IsCompleted)
+//        {
+//            _tcs.TrySetCanceled();
+//        }
+//    }
+//}
 
 
 public partial class Testowa : IAnswerable
@@ -60,11 +97,83 @@ public partial class Testowa : IAnswerable
     }
 }
 
+public class UserDialog : IUserDialog
+{
+    public async Task<bool> YesNoAsync(string message, CancellationToken ct)
+    {
+        var dialog = new YesNoDialog(message);
+
+        using (ct.Register(() => dialog.Dispatcher.Invoke(() => dialog.Close())))
+        {
+            await dialog.Dispatcher.InvokeAsync(() => dialog.Show());
+
+            try
+            {
+                return await dialog.WaitForButtonPressAsync();
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+        }
+    }
+
+    public async Task<bool> ContinueTimedOutYesNoAsync(string message, CancellationToken ct)
+    {
+        // Możesz dostosować komunikat lub zachowanie, jeśli to konieczne
+        return await YesNoAsync(message, ct);
+    }
+
+    public bool YesNo(string message)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            var dialog = new YesNoDialog(message);
+            dialog.ShowDialog();
+            tcs.SetResult(dialog.Result);
+        });
+
+        return tcs.Task.Result;
+    }
+
+    public bool ContinueTimedOutYesNo(string message, CancellationToken ct)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        if (ct.IsCancellationRequested)
+        {
+            return false;
+        }
+
+        using (ct.Register(() => tcs.TrySetCanceled()))
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var dialog = new YesNoDialog(message);
+
+                ct.Register(() => dialog.Dispatcher.Invoke(() => dialog.Close()));
+
+                dialog.ShowDialog();
+                tcs.TrySetResult(dialog.Result);
+            });
+
+            try
+            {
+                return tcs.Task.Result;
+            }
+            catch (AggregateException ex) when (ex.InnerException is TaskCanceledException)
+            {
+                return false;
+            }
+        }
+    }
+}
+
+
 public partial class MainWindow : Window
 {
-  
-
-
     public MainWindow()
     {
         InitializeComponent();
