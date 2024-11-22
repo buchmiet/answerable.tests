@@ -101,12 +101,11 @@ public class UserDialog : IUserDialog
 {
     public async Task<bool> YesNoAsync(string message, CancellationToken ct)
     {
-        var dialog = new YesNoDialog(message);
+        var dialog = new YesNoDialog(message, ct);
 
         using (ct.Register(() => dialog.Dispatcher.Invoke(() => dialog.Close())))
         {
             await dialog.Dispatcher.InvokeAsync(() => dialog.Show());
-
             try
             {
                 return await dialog.WaitForButtonPressAsync();
@@ -130,9 +129,9 @@ public class UserDialog : IUserDialog
 
         Application.Current.Dispatcher.Invoke(() =>
         {
-            var dialog = new YesNoDialog(message);
+            var dialog = new YesNoDialog(message, CancellationToken.None);
             dialog.ShowDialog();
-            tcs.SetResult(dialog.Result);
+            tcs.SetResult(dialog.WaitForButtonPressAsync().Result);
         });
 
         return tcs.Task.Result;
@@ -151,12 +150,10 @@ public class UserDialog : IUserDialog
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var dialog = new YesNoDialog(message);
-
-                ct.Register(() => dialog.Dispatcher.Invoke(() => dialog.Close()));
+                var dialog = new YesNoDialog(message, ct);
 
                 dialog.ShowDialog();
-                tcs.TrySetResult(dialog.Result);
+                tcs.TrySetResult(dialog.WaitForButtonPressAsync().Result);
             });
 
             try
@@ -169,6 +166,11 @@ public class UserDialog : IUserDialog
             }
         }
     }
+
+    public bool HasAsyncYesNo { get; }
+    public bool HasAsyncTimeoutDialog { get; }
+    public bool HasYesNo { get; }
+    public bool HasTimeoutDialog { get; }
 }
 
 
