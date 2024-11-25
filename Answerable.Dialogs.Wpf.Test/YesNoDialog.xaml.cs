@@ -25,6 +25,7 @@ namespace Answerable.Dialogs.Wpf.Test
     {
         private readonly TaskCompletionSource<bool> _tcs;
         private readonly CancellationToken _cancellationToken;
+        public event EventHandler CloseRequested;
 
         public YesNoDialogViewModel(string message, CancellationToken cancellationToken)
         {
@@ -63,34 +64,40 @@ namespace Answerable.Dialogs.Wpf.Test
         {
             _tcs.TrySetResult(false);
         }
+        private void OnCloseRequested()
+        {
+            CloseRequested?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public partial class YesNoDialog : Window
     {
+        private readonly YesNoDialogViewModel _viewModel;
         public YesNoDialog(string message, CancellationToken cancellationToken)
         {
             InitializeComponent();
-            var viewModel = new YesNoDialogViewModel(message, cancellationToken);
-            this.DataContext = viewModel;
+            _viewModel = new YesNoDialogViewModel(message, cancellationToken);
+            this.DataContext = _viewModel;
 
             // Zamknięcie okna po zakończeniu zadania
-            viewModel.WaitForButtonPressAsync().ContinueWith(_ =>
+            _viewModel.CloseRequested += OnCloseRequested;
+        }
+
+        private void OnCloseRequested(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
             {
-                if (!Dispatcher.CheckAccess())
-                {
-                    Dispatcher.Invoke(Close);
-                }
-                else
-                {
-                    Close();
-                }
-            });
+                Dispatcher.Invoke(Close);
+            }
+            else
+            {
+                Close();
+            }
         }
 
         public Task<bool> WaitForButtonPressAsync()
         {
-            var viewModel = (YesNoDialogViewModel)this.DataContext;
-            return viewModel.WaitForButtonPressAsync();
+            return _viewModel.WaitForButtonPressAsync();
         }
     }
 }

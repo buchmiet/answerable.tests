@@ -176,10 +176,19 @@ public class UserDialog : IUserDialog
 
 public partial class MainWindow : Window
 {
+
+    UserDialog dialog = new UserDialog();
     public MainWindow()
     {
         InitializeComponent();
-         var x=new Testowa(new AnswerService());
+        var answerservice = new AnswerService(dialog);
+        
+        var x=new Testowa(answerservice);
          var resp=x.DoSomething().Result;
+    }
+
+    private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
+       var response=await dialog.ContinueTimedOutYesNoAsync("Do you want to continue?", new CancellationToken());
     }
 }
