@@ -10,13 +10,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="YesNoDialog.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="YesNoDialog.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Generated\AnswerGenerator\AnswerGenerator.AnswerableGenerator\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="YesNoDialog.xaml" />
+    <None Include="YesNoDialog.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Answerable" Version="0.4.27" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Answerable.Dialogs.Wpf\Answerable.Dialogs.Wpf.csproj" />
   </ItemGroup>
 
 </Project>
