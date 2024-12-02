@@ -9,12 +9,12 @@ namespace Answerable.Dialogs.Wpf
         {
             InitializeComponent();
             _viewModel = new YesNoDialogViewModel(message, cancellationToken);
-            this.DataContext = _viewModel;
+            DataContext = _viewModel;
 
             _viewModel.CloseRequested += OnCloseRequested;
         }
 
-        private void OnCloseRequested(object sender, EventArgs e)
+        private void OnCloseRequested(object? sender, EventArgs e)
         {
             if (!Dispatcher.CheckAccess())
             {
